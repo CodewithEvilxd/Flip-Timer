@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Flip Timer</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="flipTimer.css" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+    <script src="jquery.flipTimer.js"></script>
+</head>
+
+<body>
+    <div class="container">
+        <div class="input-fields">
+            <label for="hours">Hours:</label>
+            <input type="number" placeholder="Hours..." id="hours" min="0">
+            <label for="minutes">Minutes:</label>
+            <input type="number" placeholder="Minutes..." id="minutes" min="0">
+            <label for="seconds">Seconds:</label>
+            <input type="number" placeholder="Seconds..." id="seconds" min="0">
+            <button id="start-timer">Start Timer</button>
+        </div>
+        <div class="flipTimer">
+            <div class="hours"></div>
+            <div class="minutes"></div>
+            <div class="seconds"></div>
+        </div>
+    </div>
+    <script>
+        $(document).ready(function () {
+            $('#start-timer').click(function () {
+                let hours = parseInt($('#hours').val()) || 0;
+                let minutes = parseInt($('#minutes').val()) || 0;
+                let seconds = parseInt($('#seconds').val()) || 0;
+
+                if (hours === 0) {
+                    $('.hours').hide();
+                } else {
+                    $('.hours').show();
+                }
+
+                let currentTime = new Date();
+                let targetTime = new Date(currentTime.getTime() + (hours * 3600 + minutes * 60 + seconds) * 1000);
+
+                $('.flipTimer').flipTimer({
+                    direction: 'down',
+                    date: targetTime,
+                    callback: function () { alert('Time\'s up!'); }
+                });
+
+                // Hide the input fields div
+                $('.input-fields').hide();
+            });
+
+            $(document).keydown(function (e) {
+                if (e.key === 'f' || e.key === 'F') {
+                    toggleFullScreen();
+                }
+            });
+
+            function toggleFullScreen() {
+                let elem = document.documentElement;
+                if (!document.fullscreenElement) {
+                    if (elem.requestFullscreen) {
+                        elem.requestFullscreen();
+                    } else if (elem.webkitRequestFullscreen) { /* Safari */
+                        elem.webkitRequestFullscreen();
+                    } else if (elem.msRequestFullscreen) { /* IE11 */
+                        elem.msRequestFullscreen();
+                    }
+                } else {
+                    if (document.exitFullscreen) {
+                        document.exitFullscreen();
+                    } else if (document.webkitExitFullscreen) { /* Safari */
+                        document.webkitExitFullscreen();
+                    } else if (document.msExitFullscreen) { /* IE11 */
+                        document.msExitFullscreen();
+                    }
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
